@@ -299,7 +299,7 @@ if __name__=="__main__" :
 
 	ss = ServerSpace(metric)
 
-	ss.add_servers([None, None, None])
+	ss.add_servers([(5,0), None, None])
 	a = None
 	b = (1,0)
 	c = (12,0)
