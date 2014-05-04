@@ -1,0 +1,107 @@
+\documentclass[12pt,letterpaper]{report}
+
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{multicol}
+% \addbibresource{bibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setcounter{secnumdepth}{2}
+
+\renewcommand{\lstlistingname}{Code}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\def \group #1{\langle #1 \rangle}
+\def\vec #1{\mathbf {#1}}
+\def \bif #1{\textbf{\emph{#1}}}
+\def \sf #1{\mathsf {#1}}
+\def \dist {\mathsf{d}}
+
+\newtheorem{theorem}{Theorem} 
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{defn}{Definition} 
+\newtheorem{example}{Example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\pagenumbering{roman}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+\begin{center}
+
+{\Huge \bfseries
+Analysis of \\
+the Server Problem \\
+on the Cycle  \\
+}~\\[1.00cm]
+
+{\large \bfseries
+R\&D Project Final Report
+}~\\[0.25cm]
+
+{\large
+\textit{by}
+}~\\[0.25cm]
+
+{\large
+\textbf{Aamod Kore} \\
+{{110050004}}\\
+}~\\[0.5cm]
+
+{\large
+\textit{Guide:}
+\textbf{Prof. Sundar Vishwanathan}\\
+}
+
+\vfill
+
+\includegraphics[width=4cm]{img/iitb-logo-black.jpg}~\\[1cm]
+
+{\large
+Department of Computer Science and Engineering\\
+Indian Institute of Technology -- Bombay\\
+Mumbai 400076, India\\
+}~\\[0.5cm]
+{\large \today}
+\end{center}
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{preface}
+
+\pagenumbering{arabic}
+
+\include{intro}
+
+\include{algorithms}
+
+\include{tests}
+
+\include{table1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\bibliography{report}{}
+\bibliographystyle{plain}
+\addcontentsline{toc}{chapter}{Bibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+ 
+\subsubsection{Syntax for TSO systems.}\label{subsec:TSO-Syntax}
+

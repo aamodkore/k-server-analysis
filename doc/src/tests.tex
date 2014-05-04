@@ -1,0 +1,50 @@
+\chapter{Tests and Results}\label{ch:tests-results}
+
+\section{Implementation of Algorithms}\label{sec:algorithm-implementation}
+
+The implementation of the algorithms and test cases is done in Python 3.2.3.
+
+\subsection{Optimal Algorithm}
+
+We implemented the optimal offline algorithm (Section ~\ref{sec:optimal-algorithm}). For this we had to implement an algorithm to evaluate the  minimum cost maximum flow of an directed acyclic network. For the minimum cost maximum flow problem, we use minimum cost augmentation~\cite{Tar-b} using successive shortest paths~\cite{AMO-b} based on the cost of edges. The flow along the minimum cost path is successively augmented to the flow of the network and the residual network is again iteratively augmented, until no path from the source to the sink remains.
+
+Since edges may have negative costs, we cannot use Dijkstra's algorithm. We need to find shortest path in a network where edges have negative weights, which calls for use of the Bellman-Ford algorithm. However, Bellman-Ford algorithm would take worst case $O((k+n)^2n)$ time complexity, for $k$ servers and a sequence of $n$ requests. Instead we establish node potentials and reduced  costs for edges using Bellman-Ford algorithm. Since reduced costs are non-negative and do not change shortest paths between nodes, we use Dijkstra's algorithm for finding shortest path. After augmenting the flow along the found path, the node potentials and reduced costs need to be updated.
+
+\texttt{NetworkFlow.py} contains the implementation for the minimum cost maximum flow algorithm. The \texttt{FlowNetwork} class creates the directed acyclic network. Functions \texttt{add\_vertex} and \texttt{add\_edge} help build the required network. The function \texttt{max\_flow} and \texttt{min\_cost\_max\_flow} find the maximum flow and the maximum flow with minimum cost respectively. \\
+
+Then, we create a directed acyclic network based on the number of servers and request sequence and compute the optimal service strategy based on the maximum flow with minimum cost of the created network. The \texttt{ServerSpace} class is created for these functionalities. It takes input the initial configuration of the servers and the distance function of the metric. A sequence of requests can then be added and the function \texttt{process\_requests} processes these requests and produces the output strategy.
+
+\subsection{Work Function Algorithm}
+
+The work function algorithm~\cite{KP94} (desribed in Section~\ref{sec:work-function-algorithm}) is implemented in \texttt{WorkFunction.py}. We use the dynamic programming approach to find the appropriate server to service the oncoming request. The already computed work function values are stored in the table \texttt{stored}, which is a dictionary type data structure. The dictionary data structure ensures fast $O(1)$ access to associations and also makes sure that rows in the table and elements in the rows are created only when needed. Thus, space in memory is occupied by only values of the function that are computed (i.e. there are no empty cells), giving efficient usage of memory.
+
+While an object of the \texttt{WorkFunction} class is created, it takes as input the distance function of the metric space and the initial configuration $C_0$ of the servers. Further, \texttt{add\_request} and \texttt{delete\_request} can be used to add or remove requests to or from the end of the request sequence. The function \texttt{value} returns the value of the work function given the appropriate arguments. \texttt{process\_request} takes an integer $i$ and processes the request at the $i$th position in the sequence based on the work function algorithm and produces the server that serves the request and updates the configuration of the system to after that of the request has been served.
+
+\section{The Cycle Metric Space}\label{sec:cycle-metric-implementation}
+
+For all tests we considered a cycle with small number of points (mostly $p=20$ or $p=36$). Implementing the cycle as a metric space was simple. For the cycle with $p$ points, each point was taken as an integer from $0$ to $p-1$. The distance between two points in the metric is calculated based on their difference modulo $p$. If the difference (modulo $p$) is greater than $p/2$ we take the shorter distance along the other direction.
+
+\lstset{language=Python}          % Set your language (you can change the language for each code-block optionally)
+
+\begin{lstlisting}[caption=Code for distance function of a cycle with $p$ points , frame=single]  % Start your code-block
+
+def cycle_metric(a,b) :
+	d = (b-a)%p
+	if d > p//2 :
+		return (p-d)	
+	else :
+		return d
+\end{lstlisting}
+
+
+
+\section{Generating Requests}\label{sec:generating-requests}
+
+The request sequence to be generated for the problem holds an important place. A good strategy to produce subsequent requests could have potential ways to attack the general $k$-server conjecture.
+
+\section{Evaluating Performance}\label{sec:evaluating performance}
+
+\section{Results}\label{sec:results}
+
+
+\chapter{Conclusions}\label{ch:conclusions}

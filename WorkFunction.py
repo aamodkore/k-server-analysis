@@ -12,6 +12,11 @@ class WorkFunction(object):
 	def add_request(self, r) :
 		self.requests.append(r)
 
+	def del_request(self) :
+		del self.requests[-1]
+		if not (len(self.requests)+1 >= len(self.stored)) :
+			del self.stored[-1]
+
 	def value(self, t, config) :
 		if len(self.requests) < t or t < 0:
 			return -1
@@ -45,9 +50,10 @@ class WorkFunction(object):
 			raise RuntimeError("WorkFunction::process_request : Invalid request index: (x=%d)\n" % x)
 		n = len(self.config)
 		r = self.requests[x-1]
-		minimum = infinity
+		minimum = cost = infinity
 		for i in range(n):
-			temp, self.config[i] = self.config[i], r
+			temp= self.config[i]
+			self.config[i]  = r
 			val, dist = self.value(x, self.config), self.metric(r, temp)
 			if val+dist < minimum :
 				s, cost, minimum = i, dist, val+dist
@@ -80,6 +86,7 @@ class WorkFunction(object):
 				if graph.get_flow(edge) > 0 :
 					cost += edge.cost
 					break
+		del graph
 		return cost
 
 

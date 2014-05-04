@@ -1,0 +1,43 @@
+\chapter{Introduction and Overview}\label{ch:introduction}
+
+\section{The $k$-server problem}\label{sec:k-server-problem}
+
+The $k$-server problem can be stated informally as the problem of moving around $k$ servers, in a metric space or a weighted graph, to service requests that appear online at points in the metric sapce or at nodes of the weighted graph. A formal definition can be as follows. \\
+
+Let $M$ be a metric space and $d: M\times M \rightarrow \mathbb{R}$ be the distance function such that $d$ is non-negative, symmetric and follows the triangle inequality. For simplicity, we allow distinct points in $M$ to be at zero distance. Thus $M$ is a \emph{pseudometric} rather than a metric. We call an ordered set of $k$ points in $M$ to be a configuration. Let $M^k$ denote the set of all possible configurations in $M$. 
+
+We extend the notion of $d$ from $M$ to $M^k$. Let $\dist : M^k\times M^k\rightarrow\mathbb{R}$ denote the distance between configurations in $M$. For $C_1, C_2 \in M^k$, $\dist(C_1, C_2)$ is the value of the minimum-weight perfect matching between the points of $C_1$ and $C_2$. In short, it is the minimum distance travelled by $k$ servers to change their configuration from $C_1$ to $C_2$.\\
+
+The server problem $\sf{S} = (k,\sf{M}, C_0, \sf{r})$ is defined by the number of servers $k$, a metric $\sf{M}=(M,d)$, an initial configuration $C_0\in M^k$ and a sequence of requests $\sf{r}=(r_1, \hdots ,r_m)$ where each $r_i\in M$ is a point in the metric. 
+The solution is given by a seqence of configurations $(C_1,\hdots,C_m)$, where each $C_i\in M^k$, such that for all $t = 1,\hdots,m$, $r_t\in C_t$. The objective is to minimize the cost of the solution, given by $\sum_{t=1}^m \sf{d}(C_{t-1}, C_t)$, which is the total distance travelled by the servers.
+
+An \bif{online algorithm} computes each configuration $C_t$ based on only the past, that is only on $r_1,\hdots,r_t$ and $C_1,\hdots,C_{t-1}$. An \bif{offline algorithm} may also use knowledge of future requests $r_{t+1},\hdots,r_m$. Thus an offline algorithm knows the entire request sequence before computing the solution.
+
+\subsection{Competitive Ratio}\label{competitive-ratio}
+
+For a given initial configuration $C_0$ and a sequence of requests $\sf{r}=(r_1, \hdots ,r_m)$, let $\sf{COST}_A(C_0, \sf{r})$ denote the cost of an algorithm $A$ and let $\mathcal{O}(C_0,\sf{r})$ denote the cost of an optimal solution. Then we say that algorithm $A$ has \bif{competitive ratio} $\rho$ if for every $C_0$ and $\sf{r}$, $$\sf{COST}_A(C_0, \sf{r}) \le \rho \cdot \mathcal{O}(C_0,\sf{r}) + \Phi(C_0),$$ where the term $\Phi(C_0)$ depends only on the initial configuration $C_0$ and is independent of the request sequence $\sf{r}$. 
+
+The competitive ratio of an alorithm can also be called its approximation ratio. If an algorithm has competitive ratio $\rho$, it is said to be $\rho$-competitive. \\
+
+Rather unexpectedly, it is likely that the competitve ratio of an algorithm is independent of the metric space, provided it has more than $k$ distinct points. This is given by the $k$-server conjecture ~\cite{MMS88}.
+
+\begin{conjecture}\label{thrm:k-server-conjecture}
+\emph{($k$-server conjecture)}
+For every metric space with more than $k$ distinct points, the competitive ratio of the $k$-server problem is exactly $k$.
+\end{conjecture}
+
+The $k$-server conjecture is supported by all results on the problem since it was first stated. The conjecture has neither been proved nor disproved and is open, but has been proved for $k=2$ and some special metric spaces.
+
+We specially consider the metric space of the cycle.
+
+\subsection{The Cycle Metric Space}\label{cycle-metric-space}
+
+The cycle metric space on $p$ points $\mathcal{C}_p$ is an undirected cyclic graph that consists of $p$ nodes connected cyclically. Thus formally, consider the undirected graph $G=(V,E)$ where $V=\{a_1,\hdots,a_p\}$ and for $j=1,\hdots,p-1$, $\{a_j,a_{j-1}\}\in E$, and $\{a_p,a_1\}\in E$. Let the distance function $d:V\times V\rightarrow \mathbb{N}$ be such that, $d(a,a)=0$, for all $a\in V$, and $d(a,b)$ denotes the length of the shortest path between the nodes $a$ and $b$, for $a,b\in V$ and $a \neq b$.
+
+The metric space denoted by $\mathcal{C}_p = (V,d)$ is the cycle metric space on $p$ points. \\
+
+For the cycle, given a point $a$, we denote the point furthest away from $a$ (the diametrically opposite point) as $\overline{a}$. $$\overline{a} = \argmax_{x\in V} d(a,x)$$
+
+In this report, we mainly focus on finite cycles. It has been proven for all metric spaces that the competitive ratio for $k=2$ servers is $2$ ~\cite{MMS88}. We take a look at the case for $k=3$ servers.
+
+\input{related}

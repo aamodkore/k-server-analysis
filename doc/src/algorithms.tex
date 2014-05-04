@@ -1,0 +1,43 @@
+\chapter{Algorithms for the Server Problem}\label{ch:algorithms}
+
+\section{Optimal Algorithm}\label{sec:optimal-algorithm}
+
+We take a look at at on offline strategy to find a solution to the $k$-server problem, provided the entire request sequence is given in advance. The dynamic programming algorithm of Manasse et al.\ ~\cite{MMS88} is especially suited for cases where the number of requests dramatically exceeds the number of points in the metric. It has $O(nm\binom{m}{k})$ running time and at least $O(\binom{m}{k})$ space usage for $n$ requests and $m$ points in the metric. Later in 1991, Chrobak et al. gave an $O(kn^2)$ algorithm for the $k$-server problem to serve a sequence of $n$ requests known in advance on a metric~\cite{CKPV91}. \\
+
+The algorithm, given by Chrobak et al., reduces the $k$-server problem to a minimum-cost maximum flow problem in a directed acyclic graph (DAG). If there are $k$ servers $s_1,\hdots,s_k$ and a sequence of $n$ requests $r_1,r_2\hdots,r_n$, we create a DAG as follows --
+\begin{itemize}
+\item
+The vertex set is
+$V = \{s,s_1,\hdots,s_k,r_1,r_1,r^\prime_1,r_2,r^\prime_2,\hdots,r_n,r^\prime_n,t\}$
+\item
+The node $s$ is the source and $t$ is the sink
+\item
+ For every $i\in \{1,\hdots,k\}$, there is an edge of cost $0$ from $s$ to $s_i$ and an edge of cost $0$ from $s_i$ to $t$
+\item
+For every $j\in \{1,\hdots,n\}$, there is an edge of cost $0$ from $r^\prime_j$ to $t$
+\item
+For each pair $(i,j) \in \{1,\hdots,k\} \times \{1,\hdots,n\}$, there is an edge from $s_i$ to $r_j$ of cost equal to the distance between the location of the $i$th server in the initial configuration and the location of the $j$th request
+\item
+For every $i < j$ there is an endge from $r^\prime_i$ to $r_j$ of cost equal to the distance between the $i$th and the $j$th requests
+\item
+For every $i\in \{1,\hdots,n\}$, there is an edge from $r_i$ to $r^\prime_i$ of cost $-K$, where $K$ is an extremely large real number.
+\end{itemize}
+It is shown~\cite{CKPV91} that the maximum flow in this graph is $k$ and a maximum flow with minimum cost can be found in $O(kn^2)$ time. Further, the flow can be decomposed into $k$ edge-disjoint $s\rightarrow t$ paths, the $i$th path passing through $s_i$. In the optimal solution for the problem, the $i$th server will serve exactly those requestscontained in the $s\rightarrow t$ path passing through $s_i$.
+
+\section{Work Function Algorithm}\label{sec:work-function-algorithm}
+
+In 1994, Koutsoupias et al.~\cite{KP94} established a natural online algorithm based on the dynamic programming approach, called the \bif{work function algorithm} (WFA). For metric $M$, an initial configuration $C_0$ and a sequence of requests $\sf{r}=(r_1,\hdots,r_t)$, we define for every configuration $X\in M^k$, the function $w(C_0, (r_1,\hdots,r_t),X)$ to be the cost of the optimal solution which starts at the configuration $C_0$, passes through (serves the requests) $r_1,\hdots,r_t$ (in that order) and ends at the configuration $X$. Therefore,
+$$w(C_0, (r_1,\hdots,r_t),X) = \min\{\sum_{i=1}^{t+1} \sf{d}(C_{i-1},C_i) 
+\mid C_i\in M^k \wedge
+r_i \in C_i \wedge 
+C_{t+1}=X\}$$
+
+For a given server problem, we have a fixed $C_0$ and fixed $\sf{r}=(r_1,\hdots,r_n)$ and $w$ becomes a real function of $M^k$. Such a function is called the \emph{work function} and is denoted as $w_{C_0, (r_1,\hdots,r_t)}$ or simply as $w_t$, since $C_0$ and $(r_1,\hdots,r_t)$ are fixed. The value of the work function $w_t(X)= w(C_0, (r_1,\hdots,r_t),X)$ can be computed in a dynamic programming approach as,
+$$w_i(X) = \min_{Z\in M^k, r_i\in Z} \{w_{i-1}(Z) + \sf{d}(Z,X)\}$$
+
+using the base values $w_0(X) = \sf{d}(C_0,X)$. \\
+
+To service a request $r_t$, with the current configuration $C_{t-1}$, the work function algorithm moves to the configuration $C_t$ such that $r_t\in C_t$ and such that the quantity $w_t(C-t) + \sf{d}(C_{t-1},C_t)$ is minimized. \\
+
+It has been proven~\cite{KP94, Kou09} that the work function algorithm for the $2$-server problem has competitive ratio $2$, and that the work function algorithm for the general $k$-server problem has competitive ratio of at most $2k-1$~\cite{Kou09}.
+

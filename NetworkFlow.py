@@ -280,7 +280,7 @@ class ServerSpace(object):
 						v = edge.sink
 						break
 			process.append((s, rlist))
-
+		del graph
 		return (totalCost, process)
 
 

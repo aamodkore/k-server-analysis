@@ -1,0 +1,38 @@
+-------------------------------------------------------------------------------
+Server Problem
+Test Data
+	
+	-- Aamod Kore
+-------------------------------------------------------------------------------
+
+The detailed data for individual tests is in the "tests" folder. 'results.dat' 
+gives the consolidated view.
+
+-------------------------------------------------------------------------------
+
+If the ith request is r_i and the server config after serving the request using 
+the WFA is c_i and X(r) represents the request diametrically opposite to r then,
+
+d(i) = OPT_i(c_(i-1))-OPT_(i-1)(c_(i-1))
+a(i) = OPT_i(X(r_i)^k)
+T = SUM(OPT_i(c_i)), for all terminal c_i, is the terminal configuration sum.
+
+-------------------------------------------------------------------------------
+
+The files 'case<case#>.rd' contains the results for each individual test case. 
+The first line contains the number of points on the metric of the circle. The 
+following lines contain the data (for each request process), in the form
+
+<i> <request r_i> <server config c_i> <> <d(i)> <SUM (j=0 to i) d(j)> <a(i)> <SUM (j=0 to i) a(j)>
+
+The last line contains :
+<D = SUM (j=0 to N) d(j)> <A = SUM (j=0 to N) a(j)> <Terminal Sum = T>
+
+-------------------------------------------------------------------------------
+
+The file 'results.dat' contains consolidated results for all test cases, each 
+line is of the form:
+
+<Case#> <# points on circle> <# requests> <D = SUM (j=0 to N) d(j)> <A = SUM (j=0 to N) a(j)> <Terminal Sum = T>
+
+-------------------------------------------------------------------------------
