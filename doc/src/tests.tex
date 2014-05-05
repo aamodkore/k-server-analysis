@@ -74,7 +74,7 @@ $p$ & $n$ & $\sf{COST}_{\sf{WFA}} (C_0,r)$ & $\mathcal{O}(C_0,r)$ & $\alpha$ \\
 
 We consider only the case of $k=3$. The $3$ servers divide the cycle into $3$ arcs. For a given configuration, we take the longest of the $3$ arcs and place the new requests at the mid-point of the arc (i.e. point equidistant from both servers at the end of the arc). If two points are in the mid of the arc, we randomly choose one of the two.
 
-Table~\ref{tab:mid-approx-ratio} represents the values for the approximation ration of the work function algorithm for this request generation strategy. For more data of the tests refer Section~\ref{sec:results}.
+Table~\ref{tab:mid-approx-ratio} represents the values for the approximation ratio of the work function algorithm for this request generation strategy. For more data of the tests refer Section~\ref{sec:results}.
 
 \begin{table}[!ht]
 \begin{center}
@@ -177,7 +177,7 @@ $p$ & $n$ & $\overline{\mathcal{D}}$ & $\overline{\mathcal{A}}$ & $\overline{\ma
 \end{center}
 \end{table}
 
-For all test cases (Table~\ref{tab:avg-stats-repeated-shift}), it is observed that, $\mathcal{T} < \mathcal{D} < \mathcal{A} < $. Thus, 
+For all test cases (Table~\ref{tab:avg-stats-repeated-shift}), it is observed that, $\mathcal{T} < \mathcal{D} < \mathcal{A} $. Thus, 
 $$\sum_{C_i\text{ is terminal}} w_i(C_i) < \sum_{i=1}^{n} (w_i(C_{i-1}) - w_{i-1}(C_{i-1})) < \sum_{i=1}^{n} (w_i(\overline{r_i}^k) - w_{i-1}(\overline{r_i}^k))$$
 
 \section{Test Results}\label{sec:results}
