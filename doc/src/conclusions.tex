@@ -1,0 +1,25 @@
+\chapter{Conclusions}\label{ch:conclusions}
+\section{Summary of Current Progress}\label{sec:current-progress}
+
+We have looked at the $k$-server problem, rather specifically on the 3-server problem on the cycle. We have tried a new aspect of the server problem and tried to approach the $k$-server conjecture accordingly. We generated requests with different patterns and strategies to analyse different aspects of the server problem. Large number of tests were performed corresponding to each of these strategies and separated raw data and consolidated data for every case has been catalogued accordingly.  All results of the tests performed support the $k$-server conjecture. \\
+The implementation for the algorithms is complete in Python (3.2.3). The algorithms implemented (as of April 2014) are,
+\begin{itemize}
+\item
+Minimum-cost maximum flow algorithm~\cite{Tar-b, AMO-b}, 
+\item
+Optimal offline algorithm for the general $k$-server problem, when the request sequence is known in advance~\cite{CKPV91},
+\item
+Work function algorithm for the general $k$-server problem~\cite{KP94}.
+\end{itemize}
+The data gives new insights on the $k$-server problem, though formulation of strong results based on the data remains to be done.
+
+\section{Challenges and Future Work}\label{sec:future-work}
+
+A major challenge faced was usage of memory. The work function algorithm for $k$-server problem on the cycle with $p$ points and a $n$ request sequence, in the worst case uses $O(p^kn)$ space. For the case we see for $k=3$ servers, the space usage is $O(p^3n)$. For large number of points in the metric space, the space requirements increase drastically. However for a fixed number of points, the requirement increases linearly with the size of the request sequence. Thus on a standard machine with memory of the order of hundreds of megabytes to few gigabytes, this is typically not much of a concern, since we can easily handle tens of millions of requests.
+
+Storing only those values of the work function which are computed and not allocating space for empty blocks (which is what is done in the implementation), drastically reduces memory space use. An alternate approach for very large request sequences is to destroy unused values in the table, which were previously created, and create them again when necessary. This will reduce the space complexity, but will increase the running-time complexity (since it defeats the purpose of dynamic programming). A trade-off between these two can be attempted to get the best of both worlds. \\
+
+On the other hand, the optimal algorithm the space requirement is independent of the size of the metric, but rather depends on $n$ and $k$. For fixed $k=3$, the space requirement, assuming that the corresponding directed network formed for the minimum-cost-maximum-flow is stored in edge-list or adjacency-list form, will be $O(n^2)$. Thus, the space requirement is quadratic with respect to the request sequence size. This is the best we can have, since there is no better way to fit the formed graph. This limits the size of the request sequence that can be processed on astandard machine (to few thousands of requests).
+
+Also, the time complexity for computing the optimal strategy can be reduced if heap realization is used instead of simple realization in Dijkstra's algorithm for computing the maximum flow. However, both space and time complexities for getting the optimal solution seem highly constrained, unless a better algorithm is established.
+

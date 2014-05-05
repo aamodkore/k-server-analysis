@@ -1,8 +1,8 @@
-\chapter{Tests and Results}\label{ch:tests-results}
+\chapter{Implementation, Tests and Results}\label{ch:tests-results}
 
 \section{Implementation of Algorithms}\label{sec:algorithm-implementation}
 
-The implementation of the algorithms and test cases is done in Python 3.2.3.
+The implementation of the algorithms and test cases is done in Python 3.2.3. In the sections that follow $k$ represents the number of servers (mostly and unless specified otherwise we consider $k=3$), $p$ represents the number of points on the cycle, $n$ represents the length of the request sequence and the approximation ratio is represented as $\alpha = \frac{\sf{COST}_{\sf{WFA}} (C_0,r)}{\mathcal{O}(C_0,r)}$.
 
 \subsection{Optimal Algorithm}
 
@@ -40,11 +40,152 @@ def cycle_metric(a,b) :
 
 \section{Generating Requests}\label{sec:generating-requests}
 
-The request sequence to be generated for the problem holds an important place. A good strategy to produce subsequent requests could have potential ways to attack the general $k$-server conjecture.
+The request sequence to be generated for the problem holds an important place. A good strategy to produce subsequent requests could have potential ways to attack the general $k$-server conjecture. 
 
-\section{Evaluating Performance}\label{sec:evaluating performance}
+\subsection{Random Generation}
+An initial strategy (tried out mostly to check the implementation) was to generate requests randomly at one of the points in the metric. This did not produce very interesting results. 
 
-\section{Results}\label{sec:results}
+As the sequence was random, both the work function algorithm and optimal strategy give similar performance. The ratio $\alpha = \frac{\sf{COST}_{\sf{WFA}} (C_0,r)}{\mathcal{O}(C_0,r)}$ (henceforth referred to as the approximation ratio of the algorrithm is quite close to $1.0$ (See Table~\ref{tab:random-approx-ratio}).
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$p$ & $n$ & $\sf{COST}_{\sf{WFA}} (C_0,r)$ & $\mathcal{O}(C_0,r)$ & $\alpha$ \\
+\hline
+20 & 100 & 202 & 174 & 1.161 \\
+20 & 100 & 184 & 169 & 1.089 \\
+20 & 100 & 186 & 152 & 1.224 \\
+20 & 100 & 191 & 173 & 1.104 \\
+20 & 100 & 211 & 189 & 1.116 \\
+36 & 100 & 380 & 330 & 1.152 \\
+36 & 100 & 362 & 306 & 1.183 \\
+36 & 100 & 370 & 337 & 1.098 \\
+36 & 100 & 320 & 294 & 1.088 \\
+36 & 100 & 339 & 300 & 1.130 \\
+\hline
+\end{tabular}
+\caption{Approximation Ratio of WFA for Random Generation}
+\label{tab:random-approx-ratio}
+\end{center}
+\end{table}
+
+\subsection{Generation on the Longest Arc}
+
+We consider only the case of $k=3$. The $3$ servers divide the cycle into $3$ arcs. For a given configuration, we take the longest of the $3$ arcs and place the new requests at the mid-point of the arc (i.e. point equidistant from both servers at the end of the arc). If two points are in the mid of the arc, we randomly choose one of the two.
+
+Table~\ref{tab:mid-approx-ratio} represents the values for the approximation ration of the work function algorithm for this request generation strategy. For more data of the tests refer Section~\ref{sec:results}.
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$p$ & $n$ & $\sf{COST}_{\sf{WFA}} (C_0,r)$ & $\mathcal{O}(C_0,r)$ & $\alpha$ \\
+\hline
+20 & 100 & 500 & 174 &	2.874   \\
+20  & 100 & 497       & 171	& 2.906 \\
+20  & 100 & 499       & 171	& 2.918 \\
+20  & 50  & 248       & 89	& 2.787  \\
+20  & 50  & 253       & 87	& 2.908  \\
+20  & 50  & 253       & 90	& 2.811  \\
+20  & 50  & 252       & 88	& 2.864  \\
+36  & 100 & 896       & 310	& 2.890 \\
+36  & 100 & 899       & 313	& 2.872 \\
+36  & 100 & 901       & 313	& 2.879 \\
+36  & 50  & 450       & 163	& 2.761 \\
+36  & 50  & 451       & 154	& 2.929 \\
+36  & 50  & 453       & 167	& 2.713 \\
+36  & 50  & 449       & 154	& 2.916 \\
+\hline
+\end{tabular}
+\caption{Approximation Ratio of WFA for Generation on Longest Arc}
+\label{tab:mid-approx-ratio}
+\end{center}
+\end{table}
+
+\subsection{Worst Cost Generation}
+
+The worst cost generation generates the request for which the immediate cost for processing the request based on the work function algorithm would be maximum. 
+$$ r_{t+1} = \argmax_{r\in \mathcal{C}_p} (\sf{COST}_{\sf{WFA}} (C_0,(r_1,\hdots,r_t,r)) - \sf{COST}_{\sf{WFA}} (C_0,(r_1,\hdots,r_t)) $$
+
+As it turns out worst cost generation is much similar to generartion in the middle of the longest arc. Thus it produces very similar results to the previous request sequence generation strategy. (See Section~\ref{sec:results}, Table~\ref{tab:worst-approx-ratio}). For both these strategies, the ratio is very close to $3.0$ but always less than $3.0$.
+
+\subsection{Repeated Shifting}\label{subsec:repeated-shifting}
+
+Repeated shifting involves shifting requests between adjacent locations until both of them are occupied by servers. We generate the request in phases. In each phase we take the longest arc formed by the server configuration and take the mid-point of the arc and one adjacent location to this mid-point. Then we alternately generate requests at these $2$ locations until servers occupy both these locations. Then we move on to the next phase. The following code gives an easy implementation of this strategy.
+
+\begin{lstlisting}[caption=Code for single phase of repeated shifting , frame=single]  % Start your code-block
+
+	mid = generate_middle(longest_arc(config))
+	next = (mid+1)%p
+	while True :
+		if mid not in config :
+			add_request(mid)
+		elif next not in config :
+			add_request(next)
+		else :
+			break
+		i = i+1
+
+\end{lstlisting}
 
 
-\chapter{Conclusions}\label{ch:conclusions}
+
+\section{Evaluating Performance}\label{sec:evaluating-performance}
+
+For evaluating performance further (specifically for the repeated shifting strategy), we also consider some other parameters. \\
+
+We call a configuration $C_i$ \bif{terminal} if a particular server in the configuration does not move after this configuration. Formally, we say that $C_i$ is a terminal configuration if there exists $s\in\{1,\hdots,k\}$ such that, for all $t>i$, $C_t[s] = C_i[s]$, where $C_i[j]$ represents the $j$th element (i.e. position of the $j$th server) in the ordered set configuration. $C_i$.
+
+Also, for a point on the cycle $r$, the point $\overline{r}$, as described in Section~\ref{cycle-metric-space}, represents the diametrically opposite point on the cycle.
+
+We are particularly interested in the following performance parameters--
+\begin{itemize}
+\item
+$\mathcal{D} = \sum_{i=1}^{n} (w_i(C_{i-1}) - w_{i-1}(C_{i-1}))$
+\item
+$\mathcal{A} = \sum_{i=1}^{n} (w_i(\overline{r_i}^k) - w_{i-1}(\overline{r_i}^k))$
+\item
+$\mathcal{T} = \sum_{C_i\text{ is terminal}} w_i(C_i)$
+\end{itemize}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+$p$ & $n$ & $\overline{\mathcal{D}}$ & $\overline{\mathcal{A}}$ & $\overline{\mathcal{T}}$ \\
+\hline
+20 & 100 & 260 & 270 & 213  \\
+20 & 200 & 520 & 532 & 454  \\
+20 & 250 & 648 & 658 & 574  \\
+20 & 500 & 1270 & 1367 & 1151  \\
+20 & 1000 & 2576 & 2588 & 2386  \\
+20 & 2000 & 5056 & 5077 & 4628  \\
+20 & 5000 & 12735 & 12772 & 11776  \\
+20 & 10000 & 25147 & 25158 & 23308  \\
+36 & 100 & 281 & 299 & 201  \\
+36 & 200 & 558 & 572 & 437  \\
+36 & 500 & 1343 & 1362 & 1120  \\
+36 & 1000 & 2654 & 2675 & 2271  \\
+36 & 2000 & 5292 & 5332 & 4577  \\
+36 & 5000 & 13093 & 13170 & 11315  \\
+36 & 10000 & 26301 & 26399 & 22921  \\
+\hline
+\end{tabular}
+\caption{Performance Parameters for Repeated Shifting (Mean Data, for individual case data see Section~\ref{sec:results})}
+\label{tab:avg-stats-repeated-shift}
+\end{center}
+\end{table}
+
+For all test cases (Table~\ref{tab:avg-stats-repeated-shift}), it is observed that, $\mathcal{T} < \mathcal{D} < \mathcal{A} < $. Thus, 
+$$\sum_{C_i\text{ is terminal}} w_i(C_i) < \sum_{i=1}^{n} (w_i(C_{i-1}) - w_{i-1}(C_{i-1})) < \sum_{i=1}^{n} (w_i(\overline{r_i}^k) - w_{i-1}(\overline{r_i}^k))$$
+
+\section{Test Results}\label{sec:results}
+
+This section covers the major aspects of the results. However, this is not the exhaustive cover of all the values obtained during the testing. The complete set of results can be found along with the implementation (in the \texttt{data} folder).
+
+\input{table2}
+
+\input{table1}
+\input{table0}
+

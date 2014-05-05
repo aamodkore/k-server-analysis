@@ -1,4 +1,4 @@
-\documentclass[12pt,letterpaper]{report}
+\documentclass[11pt,letterpaper]{report}
 
 \usepackage{latexsym}
 \usepackage{amsmath}
@@ -34,7 +34,6 @@
 
 \begin{document}
 
-\pagenumbering{roman}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -82,21 +81,19 @@ Mumbai 400076, India\\
 
 \include{preface}
 
-\pagenumbering{arabic}
-
 \include{intro}
 
 \include{algorithms}
 
 \include{tests}
 
-\include{table1}
+\include{conclusions}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+\addcontentsline{toc}{chapter}{Bibliography}
 \bibliography{report}{}
 \bibliographystyle{plain}
-\addcontentsline{toc}{chapter}{Bibliography}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

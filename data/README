@@ -36,3 +36,13 @@ line is of the form:
 <Case#> <# points on circle> <# requests> <D = SUM (j=0 to N) d(j)> <A = SUM (j=0 to N) a(j)> <Terminal Sum = T>
 
 -------------------------------------------------------------------------------
+
+"test1.dat" contains the results pertaining to the 'test1.py' implementation,
+which generates successive requests for worst immediate serving cost.
+
+The results in each line are of the form:
+<# points on circle> <# requests> <WFA Cost> <Opt Cost> <Approx. Ratio>
+
+-------------------------------------------------------------------------------
+
+

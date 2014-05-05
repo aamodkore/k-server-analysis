@@ -4,8 +4,8 @@ import sys
 import WorkFunction
 from WorkFunction import *
 
-perim = 20
-tests = 50
+perim = 100
+tests = 100
 		
 def c_metric(a,b) :
 	a = 0 if not a else a%perim
@@ -53,7 +53,7 @@ if __name__=="__main__" :
 
 		onlineCost = 0
 		for i in range(tests) :
-			mid = generate(wf.config)
+			mid = random.randrange(perim)
 			wf.add_request(mid)
 			cost = wf.process_request(i+1)
 			onlineCost += cost[0]
