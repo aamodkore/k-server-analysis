@@ -5,8 +5,9 @@ import WorkFunction
 from WorkFunction import *
 
 perim = 36
-tests = 10000
-		
+tests = 10
+
+"""Distaance function of the circle metric"""		
 def c_metric(a,b) :
 	a = 0 if not a else a%perim
 	b = 0 if not b else b%perim
@@ -15,6 +16,7 @@ def c_metric(a,b) :
 		return perim-d
 	return d
 
+"""Finding midpoint of an arc on the circle"""
 def c_metric_mid(a,b) :
 	a = 0 if not a else a%perim
 	b = 0 if not b else b%perim
@@ -26,9 +28,11 @@ def c_metric_mid(a,b) :
 def vector(r,k):
 	return k*[r]
 
+"""Finding farthest (diametrically opposite) point on circle"""
 def c_metric_opp(a) :
 	return (a+perim//2)%perim
 
+"""Generate reqquest"""
 def generate(conf) :
 	n = len(conf)
 	config = sorted(conf)
@@ -64,6 +68,7 @@ if __name__=="__main__" :
 		cost = wf.value(0, wf.config)
 		terminalSum = vector(cost,3)
 		print(perim, file=fp)
+		print(initConfig, file=fp)
 		i = 0
 		onlineCost = 0
 		sumDiff = 0
@@ -85,6 +90,7 @@ if __name__=="__main__" :
 				complementVec = vector(c_metric_opp(wf.requests[i-1]),3)
 				diff = wf.value(i,list(prevConfig)) - wf.value(i-1,list(prevConfig))
 				sumDiff += diff 
+				# Calculate OPT(i+1,r'_i^k)-OPT(i,r'_i^k)
 				diffOpp = wf.value(i,complementVec) - wf.value(i-1,complementVec)
 				sumDiffOpp += diffOpp 
 				print(i, wf.config, cost[0], diff, sumDiff, diffOpp, sumDiffOpp, file=fp)
@@ -94,9 +100,24 @@ if __name__=="__main__" :
 				# print(i, wf.requests[i-1], cost[1])
 
 		print(sumDiff, sumDiffOpp, sum(terminalSum), file=fp)
-		print(b, perim, i, sumDiff, sumDiffOpp, sum(terminalSum), file=sys.stderr)
+		# print(b, perim, i, sumDiff, sumDiffOpp, sum(terminalSum), file=sys.stderr)
 		del wf.stored
+
+		opt = ServerSpace(c_metric)
+		opt.add_servers(list(initConfig))
+		optPath = opt.process_requests(wf.requests)
+		optCost = optPath[0]
+
+		print("\nOptimal :", file=fp)
+		for p in range(3) :
+			rlist = optPath[1][p][1]
+			print("Server %d : "%p, file=fp)
+			for q in range(len(rlist)) :
+				print(optPath[1][p][1][q], end=" ", file=fp)
+			print(file=fp)
 
 		fp.close()
 		print("Done", t)
+		print("%3d %4d %7d %7d\t%2.3f"%(perim, tests, onlineCost, optCost, onlineCost/optCost), file=sys.stderr)
+
 		

@@ -3,10 +3,15 @@ from NetworkFlow import *
 
 class WorkFunction(object):
 	def __init__(self, init_config, metric):
+		"""Stores the computed values of the WorkFunction"""
 		self.stored = []
+		"""Stores the request sequeence"""
 		self.requests = []
+		"""Current configuration of the system"""
 		self.config = init_config ;
+		"""Initial configuration of the system"""
 		self.init_config = init_config ;
+		"""The metric space distance function"""
 		self.metric = metric
 
 	def add_request(self, r) :
@@ -17,17 +22,22 @@ class WorkFunction(object):
 		if not (len(self.requests)+1 >= len(self.stored)) :
 			del self.stored[-1]
 
+	"""Computes the value of the WorkFunction W_t(config)"""
 	def value(self, t, config) :
+		"""If t>request count handle case appropriately"""
 		if len(self.requests) < t or t < 0:
 			return -1
 		while t >= len(self.stored) :
 			self.stored.append(dict([]))
+		"""If value is already present in table, return the same"""
 		if tuple(config) in self.stored[t] : 
 			return (self.stored[t])[tuple(config)]
 		# print("Calculating")
+		"""If t=0, return min cost of bipartite matching"""
 		if t==0 :
 			(self.stored[t])[tuple(config)] = self.min_cost_to(config)
 			return ((self.stored)[t])[tuple(config)]
+		"""Else, compute WF as required"""
 		n = len(config)
 		r = self.requests[t-1]
 		minimum = infinity
@@ -40,9 +50,12 @@ class WorkFunction(object):
 			if val+dist < minimum :
 				minimum = val+dist
 			config[i] = temp
+		"""Store computed value in table"""
 		(self.stored[t])[tuple(config)] = minimum
 		return minimum
 
+	"""Processes the request at position x based on the WFA and 
+	changes current configuration of the system accordingly"""
 	def process_request(self, x) :
 		if x == -1 :
 			x = len(self.requests)
@@ -61,6 +74,9 @@ class WorkFunction(object):
 		self.config[s] = r
 		return (cost, s)
 
+	
+	"""Computes min cost  using minimum bipartite matching) from
+		Initial configuration init_config to given config"""
 	def min_cost_to(self, config) :
 		n = min(len(config), len(self.init_config))
 		graph = FlowNetwork()
