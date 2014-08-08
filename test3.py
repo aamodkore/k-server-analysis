@@ -1,3 +1,25 @@
+"""
+	** Aamod Kore **
+	Computer Science and Engineering,
+	Indian Institute of Technology - Bombay.
+	www.cse.iitb.ac.in/~aamod
+	aamod[at]cse.iitb.ac.in
+"""
+
+
+"""
+Code generates data files (.rd files) for randomly generated test cases.
+The results are of the form :
+<i> <request r_i> <server config c_i> <> <d(i)> <SUM (j=0 to i) d(j)> <a(i)> <SUM (j=0 to i) a(j)>
+
+The last line contains of the file contains:
+<D = SUM (j=0 to N) d(j)> <A = SUM (j=0 to N) a(j)> <Terminal Sum = T>
+
+Read the README file within the data folder for more details
+
+"""
+
+
 import random
 import sys
 

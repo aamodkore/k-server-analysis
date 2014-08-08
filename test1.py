@@ -1,3 +1,11 @@
+"""
+	** Aamod Kore **
+	Computer Science and Engineering,
+	Indian Institute of Technology - Bombay.
+	www.cse.iitb.ac.in/~aamod
+	aamod[at]cse.iitb.ac.in
+"""
+
 import random
 import sys
 
